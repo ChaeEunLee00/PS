@@ -12,11 +12,11 @@ public class Main{
         while(a !=  0 && b != 0 && c != 0){
             int max = a;
             int remainders = b + c;
-            if(b > a) {
+            if(b > max) {
                 max = b;
                 remainders = a + c;
             }
-            if(c > a) {
+            if(c > max) {
                 max = c;
                 remainders = a + b;
             }
