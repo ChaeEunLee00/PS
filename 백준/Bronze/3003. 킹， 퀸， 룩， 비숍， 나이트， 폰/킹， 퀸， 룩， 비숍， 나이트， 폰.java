@@ -11,7 +11,6 @@ public class Main{
             int find = sc.nextInt();
             System.out.print(original[i]-find + " ");
         }
-        String line = sc.nextLine();
         
     }
 }
