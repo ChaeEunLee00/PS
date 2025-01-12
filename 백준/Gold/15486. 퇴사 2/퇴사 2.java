@@ -1,15 +1,18 @@
+import java.io.*;
 import java.util.*;
 
 public class Main{
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
-        int N = sc.nextInt();
+        int N = Integer.parseInt(br.readLine());
         int[][] schedule = new int[N+1][2];
         
+        StringTokenizer st;
         for(int i = 0; i < N; i++){
-            schedule[i][0] = sc.nextInt();
-            schedule[i][1] = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            schedule[i][0] = Integer.parseInt(st.nextToken());
+            schedule[i][1] = Integer.parseInt(st.nextToken());
         }
         
         int max = 0;
@@ -24,5 +27,6 @@ public class Main{
         }
      
         System.out.println(max);
+        br.close();
     }
 }
