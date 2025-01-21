@@ -10,15 +10,6 @@ public class Main{
     public static int[][] room;
     public static int count = 0;
 
-    public static class Point{
-        int y,x;
-
-        public Point(int y, int x){
-            this.y = y;
-            this.x = x;
-        }
-    }
-
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
@@ -82,8 +73,9 @@ public class Main{
 
                 // 후진 불가 시 작동 멈춤
                 if(room[r][c] == 1) break;
-            } else{
-                // 2. 빈칸이 있다면
+            } 
+            // 2. 빈칸이 있다면
+            else{ 
                 // 반시계 방향으로 90도 회전
                 if(d == 0) d = 3;
                 else d--;
