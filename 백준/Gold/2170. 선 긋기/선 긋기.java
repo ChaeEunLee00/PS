@@ -31,7 +31,7 @@ public class Main{
 
         Collections.sort(lines);
         int totalLength = lines.get(0).p2 - lines.get(0).p1;
-        int endPoint = lines.get(0).p2;
+        int endPoint = lines.get(0).p2; // 마지막 포인트 업데이트 
         for(int i = 1; i < N; i++){
             Line curline = lines.get(i);
             if(curline.p1 <= endPoint){
