@@ -4,7 +4,6 @@ import java.util.*;
 public class Main{
     public static int M;
     public static int N;
-    public static int[][] box;
     public static int[] dY = {1, -1, 0, 0};
     public static int[] dX = {0, 0, 1, -1};
 
@@ -24,7 +23,7 @@ public class Main{
         M = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
 
-        box = new int[N][M];
+        int[][] box = new int[N][M];
         for(int i = 0; i < N; i++){
             st = new StringTokenizer(br.readLine());
             for(int j = 0; j < M; j++){
@@ -33,25 +32,11 @@ public class Main{
         }
 
         // 모든 토마토가 익어있다면 (= 안익은 토마토가 없다면) 0
-        if(!containsZero()){
+        if(!containsZero(box)){
             System.out.println(0);
             return;
         }
 
-        // 익은 토마토들 기준으로 bfs 진행 -> 모두 익을 때 까지 걸린 최소 날짜 리턴
-        int day = bfs();
-
-        // 토마토가 모두 익지 못하는 상황이면 (= 안익은 토마토가 있다면) -1
-        if(containsZero()){
-            System.out.println(-1);
-            return;
-        }
-
-        // day 출력
-        System.out.println(day);
-    }
-
-    public static int bfs(){
         // 익은 토마토 큐에 넣은 후
         Queue<Tomato> q = new LinkedList<>();
         for(int i = 0; i < N; i++){
@@ -76,10 +61,18 @@ public class Main{
                 }
             }
         }
-        return day;
+
+        // 토마토가 모두 익지 못하는 상황이면 (= 안익은 토마토가 있다면) -1
+        if(containsZero(box)){
+            System.out.println(-1);
+            return;
+        }
+
+        // 마지막 day 출력
+        System.out.println(day);
     }
 
-    public static boolean containsZero(){
+    public static boolean containsZero(int[][] box){
         for(int i = 0; i < N; i++){
             for(int j = 0; j < M; j++){
                 if(box[i][j] == 0) return true;
