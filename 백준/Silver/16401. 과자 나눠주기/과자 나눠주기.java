@@ -16,7 +16,7 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             snacks[i] = Integer.parseInt(st.nextToken());
-            if(snacks[i] > maxLength) maxLength = snacks[i];
+            maxLength = Math.max(maxLength,snacks[i]);
         }
 
         int start = 1;
