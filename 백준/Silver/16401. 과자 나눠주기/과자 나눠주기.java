@@ -26,8 +26,7 @@ public class Main {
 
             // 나눠줄 수 있는 갯수 구하기
             int num = 0;
-            for(int i = N-1; i >= 0; i--){
-                if(snacks[i] < mid) continue;
+            for(int i = 0; i < N; i++){
                 num += snacks[i] / mid;
             }
 
