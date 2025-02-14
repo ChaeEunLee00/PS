@@ -1,42 +1,43 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-	static int n;
-	static long[] arr;
-	public static void main(String[] args) throws IOException{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		n = Integer.parseInt(br.readLine());
-		
-		arr = new long[n];
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		for(int i=0; i<n; i++) {
-			arr[i] = Long.parseLong(st.nextToken());
-		}
-		
-		long min = Long.MAX_VALUE;
-		int ml =0, mr = 0;
-		for(int i=0; i<n-1; i++) {
-			int left =i+1;
-			int right =n-1;
-			while(left<=right) {
-				int mid = (left+right)/2;
-				long sum = Math.abs(arr[i]+arr[mid]);
-				
-				if(min > sum) {
-					min = sum;
-					ml = i; mr = mid;
-				}
-				if(arr[mid]>= -arr[i]) {
-					right = mid-1;
-				}else{
-					left = mid+1;
-				}
-			}
-		}
-		System.out.println(arr[ml]+" "+arr[mr]);
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        int N = Integer.parseInt(br.readLine());
+
+        int[] solutions = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i = 0; i < N; i++){
+            solutions[i] = Integer.parseInt(st.nextToken());
+        }
+
+        long sol1 = 0;
+        long sol2 = 0;
+        long min = Long.MAX_VALUE;
+        for(int i = 0; i < N-1; i++){
+            long target = solutions[i];
+
+            int left = i+1;
+            int right = N-1;
+            while(left <= right){
+                int mid = (left + right) / 2;
+
+                long sum = Math.abs(target + solutions[mid]);
+                if(sum < min){
+                    min = sum;
+                    sol1 = target;
+                    sol2 = solutions[mid];
+                }
+
+               if(solutions[mid] < -target) left = mid+1;
+               else right = mid-1;
+            }
+        }
+
+        sb.append(sol1).append(" ").append(sol2);
+        System.out.println(sb.toString());
+    }
 }
