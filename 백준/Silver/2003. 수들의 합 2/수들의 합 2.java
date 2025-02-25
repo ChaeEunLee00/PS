@@ -8,20 +8,24 @@ public class Main {
 
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
-        int[] arr = new int[N];
+        int[] arr = new int[N+1];
 
         st = new StringTokenizer(br.readLine());
         for(int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
+        int l = 0;
+        int r = 0;
+        int sum = 0;
         int cnt = 0;
-        for(int i = 0; i < N; i++){
-            int sum = 0;
-            for(int j = i; j < N; j++){
-                sum += arr[j];
-                if(sum == M) cnt++;
+        while(r <= N){
+            if(sum < M){
+                sum += arr[r++];
+            } else{
+                sum -= arr[l++];
             }
+            if(sum == M) cnt++;
         }
 
         System.out.println(cnt);
