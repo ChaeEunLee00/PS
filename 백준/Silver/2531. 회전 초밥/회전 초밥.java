@@ -10,22 +10,35 @@ public class Main {
         int d = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
         int c = Integer.parseInt(st.nextToken());
-        int[] arr = new int[N+k];
 
+        int[] arr = new int[N+k-1];
         for(int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(br.readLine());
-            if(i < k) arr[i+N] = arr[i];
+            if(i < k-1) arr[i+N] = arr[i];
         }
 
-        int max = 0;
-        Set<Integer> set = new HashSet<>();
-        for(int i = 0; i < N; i++){
-            set.add(c);
-            for(int j = i; j < i+k; j++){
-                set.add(arr[j]);
-            }
-            max = Math.max(max, set.size());
-            set.clear();
+        // 쿠폰 추가
+        int[] eaten = new int[d+1];
+        eaten[c] = 1;
+
+        // 윈도우 초기화
+        int cnt = 1;
+        for(int i = 0; i < k; i++){
+            if(eaten[arr[i]] == 0) cnt++;
+            eaten[arr[i]]++;
+        }
+
+        // 슬라이딩 윈도우
+        int max = cnt;
+        for(int i = 1; i < N; i++){
+            // 앞 제거
+            eaten[arr[i-1]]--;
+            if(eaten[arr[i-1]] == 0) cnt--;
+
+            // 뒤 추가
+            if(eaten[arr[i+k-1]] == 0) cnt++;
+            eaten[arr[i+k-1]]++;
+            max = Math.max(max,cnt);
         }
 
         System.out.println(max);
