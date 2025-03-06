@@ -13,12 +13,12 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        Stack<Integer> s = new Stack<>(); // 오큰수 탐색이 필요한 것들을 스택에 넣음
+        ArrayDeque<Integer> s = new ArrayDeque<>(); // 오큰수 탐색이 필요한 것들을 스택에 넣음
         for(int i = 0; i < N; i++){
             while(!s.isEmpty() && arr[s.peek()] < arr[i]){
                 arr[s.pop()] = arr[i];
             }
-            s.add(i);
+            s.push(i);
         }
 
         while(!s.isEmpty()){
