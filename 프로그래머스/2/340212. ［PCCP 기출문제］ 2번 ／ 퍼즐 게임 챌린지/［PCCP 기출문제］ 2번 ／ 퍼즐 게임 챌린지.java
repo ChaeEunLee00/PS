@@ -17,12 +17,8 @@ class Solution {
             long time = 0;
             for(int i = 0; i < diffs.length; i++){
                 int diff = diffs[i] - mid;
-                if(diff > 0){
-                    if(i == 0){
-                        time += times[i]*diff;
-                    } else{
-                        time += (times[i-1]+times[i])*diff;
-                    }
+                if(i != 0 && diff > 0){ // i=0인 경우 난이도는 항상 1 => 무조건 틀리지 않음
+                    time += (times[i-1]+times[i])*diff;
                 }
                 time += times[i];
             }
