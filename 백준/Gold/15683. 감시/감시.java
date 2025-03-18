@@ -1,185 +1,172 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    static class Point{
-        int x;
-        int y;
-        int cctvNum;
-        Point(int x, int y, int cctvNum) {
-            this.x = x;
-            this.y = y;
-            this.cctvNum = cctvNum;
-        }
-    }
-    static int N, M;
-    static int min = Integer.MAX_VALUE;
-    static int[][] dist = {{}, {0, 1, 2, 3}, {}, {}, {}, {}};
-    public static void main(String[] args) throws Exception {
+    public static int N;
+    public static int M;
+    public static ArrayList<int[]> cctvs;
+    public static int min = Integer.MAX_VALUE;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
+        // N M
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        int[][] map = new int[N][M];
-        ArrayList<Point> cctv = new ArrayList<>();
 
-        for(int i=0; i<N; i++) {
+        cctvs = new ArrayList<>();
+        int[][] map = new int[N][M];
+        for(int i = 0; i < N; i++){
             st = new StringTokenizer(br.readLine());
-            for(int j=0; j<M; j++) {
+            for(int j = 0; j < M; j++){
                 map[i][j] = Integer.parseInt(st.nextToken());
-                //벽이나 빈 곳이 아닐 때 = cctv인 경우
-                if(map[i][j] != 0 && map[i][j] != 6) {
-                    cctv.add(new Point(i, j, map[i][j]));
-                }
+                if(map[i][j] >= 1 && map[i][j] <= 5) cctvs.add(new int[]{i,j,map[i][j]});
             }
         }
 
-        dfs(0, map, cctv);
+        runCCTV(0, map);
         System.out.println(min);
     }
 
-    public static void dfs(int cnt, int[][] map, ArrayList<Point> cctv) {
-        if(cnt == cctv.size()) {
-            min = Math.min(min, getZeroCnt(map));
+    public static void runCCTV(int cctvNum, int[][] map){
+        if(cctvNum == cctvs.size()){
+            min = Math.min(min, getZero(map));
             return;
         }
 
-        int cctvNum = cctv.get(cnt).cctvNum;
-        int x = cctv.get(cnt).x;
-        int y = cctv.get(cnt).y;
+        int[] cctv = cctvs.get(cctvNum);
+
         int[][] tmp;
-        if(cctvNum == 1) {
+        if(cctv[2] == 1) {
             tmp = copyMap(map);
-            checkLeft(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchUp(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkRight(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchDown(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkDown(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchLeft(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkUp(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
-        } else if (cctvNum == 2) {
+            watchRight(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
+        }
+        else if(cctv[2] == 2){
             tmp = copyMap(map);
-            checkLeft(tmp, x, y);
-            checkRight(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchUp(cctv[0], cctv[1], tmp);
+            watchDown(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkUp(tmp, x, y);
-            checkDown(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
-        } else if (cctvNum == 3) {
+            watchLeft(cctv[0], cctv[1], tmp);
+            watchRight(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
+        }
+        else if(cctv[2] == 3){
             tmp = copyMap(map);
-            checkLeft(tmp, x, y);
-            checkUp(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchUp(cctv[0], cctv[1], tmp);
+            watchRight(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkUp(tmp, x, y);
-            checkRight(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchRight(cctv[0], cctv[1], tmp);
+            watchDown(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkRight(tmp, x, y);
-            checkDown(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchDown(cctv[0], cctv[1], tmp);
+            watchLeft(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkDown(tmp, x, y);
-            checkLeft(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
-        } else if(cctvNum == 4) {
+            watchLeft(cctv[0], cctv[1], tmp);
+            watchUp(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
+        }
+        else if(cctv[2] == 4){
             tmp = copyMap(map);
-            checkLeft(tmp, x, y);
-            checkUp(tmp, x, y);
-            checkRight(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchLeft(cctv[0], cctv[1], tmp);
+            watchUp(cctv[0], cctv[1], tmp);
+            watchRight(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkUp(tmp, x, y);
-            checkRight(tmp, x, y);
-            checkDown(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchUp(cctv[0], cctv[1], tmp);
+            watchRight(cctv[0], cctv[1], tmp);
+            watchDown(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkRight(tmp, x, y);
-            checkDown(tmp, x, y);
-            checkLeft(tmp ,x , y);
-            dfs(cnt+1, tmp, cctv);
+            watchRight(cctv[0], cctv[1], tmp);
+            watchDown(cctv[0], cctv[1], tmp);
+            watchLeft(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
 
             tmp = copyMap(map);
-            checkDown(tmp, x, y);
-            checkLeft(tmp ,x , y);
-            checkUp(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
-        } else if(cctvNum == 5) {
+            watchDown(cctv[0], cctv[1], tmp);
+            watchLeft(cctv[0], cctv[1], tmp);
+            watchUp(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
+        }
+        else if(cctv[2] == 5){
             tmp = copyMap(map);
-            checkRight(tmp, x, y);
-            checkDown(tmp, x, y);
-            checkLeft(tmp ,x , y);
-            checkUp(tmp, x, y);
-            dfs(cnt+1, tmp, cctv);
+            watchUp(cctv[0], cctv[1], tmp);
+            watchDown(cctv[0], cctv[1], tmp);
+            watchLeft(cctv[0], cctv[1], tmp);
+            watchRight(cctv[0], cctv[1], tmp);
+            runCCTV(cctvNum+1, tmp);
         }
     }
 
-    public static void checkLeft(int[][] map, int x, int y) {
-        for(int i=y-1; i>=0; i--) {
-            if(map[x][i] == 6) return;
-            if(map[x][i] != 0) continue;
-            map[x][i] = -1;
-        }
-    }
-
-    public static void checkRight(int[][] map, int x, int y) {
-        for(int i=y+1; i<M; i++) {
-            if(map[x][i] == 6) return;
-            if(map[x][i] != 0) continue;
-            map[x][i] = -1;
-        }
-    }
-
-    public static void checkUp(int[][] map, int x, int y) {
-        for(int i=x-1; i>=0; i--) {
-            if(map[i][y] == 6) return;
-            if(map[i][y] != 0) continue;
-            map[i][y] = -1;
-        }
-    }
-
-    public static void checkDown(int[][] map, int x, int y) {
-        for(int i=x+1; i<N; i++) {
-            if(map[i][y] == 6) return;
-            if(map[i][y] != 0) continue;
-            map[i][y] = -1;
-        }
-    }
-
-    public static int getZeroCnt(int[][] map) {
-        int zerCnt = 0;
-        for(int i=0; i<N; i++) {
-            for(int j=0; j<M; j++) {
-                if(map[i][j] == 0) zerCnt++;
+    public static int getZero(int[][] map){
+        int cnt = 0;
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                if(map[i][j] == 0) cnt++;
             }
         }
-        return zerCnt;
+        return cnt;
     }
 
-    public static int[][] copyMap(int[][] map) {
-        int[][]tmp = new int[N][M];
-        for(int i=0; i<N; i++) {
-            for(int j=0; j<M; j++) {
-                tmp[i][j] = map[i][j];
+    public static int[][] copyMap(int[][] map){
+        int[][] newMap = new int[N][M];
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < M; j++){
+                newMap[i][j] = map[i][j];
             }
         }
-        return tmp;
+        return newMap;
+    }
+
+    public static void watchUp(int y, int x, int[][] map){
+        for(int i = y-1; i >= 0; i--){
+            if(map[i][x] == 6) break;
+            map[i][x] = -1;
+        }
+    }
+
+    public static void watchDown(int y, int x, int[][] map){
+        for(int i = y+1; i < N; i++){
+            if(map[i][x] == 6) break;
+            map[i][x] = -1;
+        }
+    }
+
+    public static void watchLeft(int y, int x, int[][] map){
+        for(int i = x-1; i >= 0; i--){
+            if(map[y][i] == 6) break;
+            map[y][i] = -1;
+        }
+    }
+
+    public static void watchRight(int y, int x, int[][] map){
+        for(int i = x+1; i < M; i++){
+            if(map[y][i] == 6) break;
+            map[y][i] = -1;
+        }
     }
 }
