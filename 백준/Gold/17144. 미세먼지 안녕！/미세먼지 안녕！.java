@@ -34,7 +34,8 @@ public class Main {
     }
 
     public static void moveDust(int[][] room){
-        // 미세먼지 확산 양 계산
+        // 이중확산 방지를 위해, 우선 확산 양 계산 후 한꺼번에 확산
+        // 미세먼지 확산 양 계산 
         int[][] dust = new int[R][C];
         for(int i = 0; i < R; i++){
             for(int j = 0; j < C; j++){
