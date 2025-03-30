@@ -30,19 +30,21 @@ class Solution {
             nodes.get(fares[i][1]).add(new Node(fares[i][0], fares[i][2]));
         }
         
-        // 합승 하는 경우 하지않는 경우 계산 - 다익스트라
-        int each = DST(s,a)+DST(s,b);
-        int together = Integer.MAX_VALUE;
+        // 다익스트라
+        int[] startS = dijkstra(s);
+        int[] startA = dijkstra(a);
+        int[] startB = dijkstra(b);
+        
+        int answer = Integer.MAX_VALUE;
         for(int i = 1; i <= n; i++){
-            if(i == s) continue;
-            together = Math.min(together, DST(s,i)+DST(i,a)+DST(i,b));
+            answer = Math.min(answer, startS[i]+startA[i]+startB[i]);
         }
         
-        return each < together ? each : together;
+        return answer;
     }
     
-    // Dijkstra
-    public int DST(int start, int end){
+    // dijkstra
+    public int[] dijkstra(int start){
         // dp 초기화
         int[] dp = new int[n+1];
         for(int i = 1; i <= n; i++){
@@ -58,9 +60,6 @@ class Solution {
             // 최소 거리 노드 방문
             Node cur = pq.poll();
             
-            // 목적지라면 break
-            if(cur.num == end) break;
-            
             // 현재노드에서 방문할 수 있는 노드의 최소 거리 업데이트
             if(dp[cur.num] < cur.distance) continue;
             for(Node next : nodes.get(cur.num)){
@@ -72,7 +71,6 @@ class Solution {
             }
         }
         
-        return dp[end];
+        return dp;
     }
-    
 }
