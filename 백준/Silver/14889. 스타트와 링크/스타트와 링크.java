@@ -38,20 +38,11 @@ public class Main {
 
     public static int getDiff(boolean[] visited){
         int start = 0;
-        for(int i = 0; i < N; i++){
-            if(!visited[i]) continue;
-            for(int j = i+1; j < N; j++){
-                if(!visited[j]) continue;
-                start += (stats[i][j] + stats[j][i]);
-            }
-        }
-
         int link = 0;
         for(int i = 0; i < N; i++){
-            if(visited[i]) continue;
-            for(int j = i+1; j < N; j++){
-                if(visited[j]) continue;
-                link += (stats[i][j] + stats[j][i]);
+            for(int j = 0; j < N; j++){
+                if(visited[i] && visited[j]) start += stats[i][j];
+                if(!visited[i] && !visited[j]) link += stats[i][j];
             }
         }
 
