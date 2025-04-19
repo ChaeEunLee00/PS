@@ -84,10 +84,15 @@ public class Main {
                     Shark shark = sharks[map[i][j]];
 
                     // 상어의 다음 이동 위치
-                     int s = 0;
+                    int speed = shark.speed;
+                    if(shark.direction == 0 || shark.direction == 1)
+                        speed %= (R-1) * 2;
+                    else if(shark.direction == 2 || shark.direction == 3)
+                        speed %= (C-1) * 2;
+
                      int nextR = i;
                      int nextC = j;
-                     while(s < shark.speed){
+                     for(int s = 0; s < speed; s++){
                          nextR += dR[shark.direction];
                          nextC += dC[shark.direction];
 
@@ -99,8 +104,6 @@ public class Main {
                              nextR += dR[shark.direction]*2;
                              nextC += dC[shark.direction]*2;
                          }
-
-                         s++;
                      }
 
                      // 한 위치에 상어가 두마리 이상일 땐 큰 상어가 이김
