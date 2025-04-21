@@ -1,55 +1,42 @@
 import java.util.*;
 
 class Solution {
+    public static class EdgeInfo{
+        int in, out;
+        public EdgeInfo(int in, int out){
+            this.in = in;
+            this.out = out;
+        }
+    } 
+    
     public int[] solution(int[][] edges) {
+        // 생성한 정점 : in 0 & out 2 이상
+        // 막대 모양 : out 0
+        // 8자 모양 : in 2 이상 out 2
+        // 도넛 모양 : 생성한 쟁점 out 수 - 막대모양 수 - 8자 모양 수
+            
+        Map<Integer,EdgeInfo> nodes = new HashMap<>();
+        for(int i = 0; i < edges.length; i++){
+            EdgeInfo inInfo = nodes.getOrDefault(edges[i][1], new EdgeInfo(0,0));
+            inInfo.in++;
+            nodes.put(edges[i][1], inInfo);
+            
+            EdgeInfo outInfo = nodes.getOrDefault(edges[i][0], new EdgeInfo(0,0));
+            outInfo.out++;
+            nodes.put(edges[i][0], outInfo);
+        }
+        
         int[] answer = new int[4];
-        
-        // 생성된 정점: out 2, in x  (1)
-        // 막대: out x (2)
-        // 8자: out 2, in 2개 이상  (3)
-        // 도넛: out 1, in 1개 이상 (4) = (1) - (2) - (3)
-        
-        
-        // 정점별 out, in 수 저장
-        Map<Integer, int[]> nodes = new HashMap<>();  
-        for(int[] edge: edges){
-            if(!nodes.containsKey(edge[0])){
-                nodes.put(edge[0], new int[]{0,0});
-            } 
+        for(Map.Entry<Integer,EdgeInfo> node : nodes.entrySet()){
+            EdgeInfo edgeInfo = node.getValue();
+            int in = edgeInfo.in;
+            int out = edgeInfo.out;
             
-            if(!nodes.containsKey(edge[1])){
-                nodes.put(edge[1], new int[]{0,0});
-            } 
-            
-            nodes.get(edge[0])[0]++;
-            nodes.get(edge[1])[1]++;
+            if(in == 0 && out >= 2) answer[0] = node.getKey();
+            else if(out == 0) answer[2]++;
+            else if(in >= 2 && out == 2) answer[3]++;
         }
-        
-        // 생성된 정점 찾기
-        for(Map.Entry<Integer, int[]> node : nodes.entrySet()){
-            if(node.getValue()[0] >= 2 && node.getValue()[1] == 0){
-                answer[0] = node.getKey();
-            }   
-        }
-            
-        // 생성된 정점 간선 수 저장 후
-        int totalGraphNum = nodes.get(answer[0])[0];
-        
-        // 막대그래프 수 찾기
-        for(Map.Entry<Integer, int[]> node : nodes.entrySet()){
-            if(node.getValue()[0] == 0){
-                answer[2]++;
-            } 
-        }
-            
-        // 8자 그래프 수 찾기
-        for(Map.Entry<Integer, int[]> node : nodes.entrySet()){
-            if(node.getValue()[0] == 2 && node.getValue()[1] >= 2){
-                answer[3]++;
-            }   
-        }
-        
-        answer[1] = totalGraphNum - answer[2] - answer[3];
+        answer[1] = nodes.get(answer[0]).out - answer[2] - answer[3];
         
         return answer;
     }
