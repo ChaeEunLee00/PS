@@ -1,49 +1,89 @@
-import java.util.ArrayList;
- 
+import java.util.*;
+
 class Solution {
-    public static long solution(String expression) {
-        long answer = Long.MIN_VALUE;
-        String op[][] = { { "+", "-", "*" }, { "+", "*", "-" }, { "-", "*", "+" }, 
-                         { "-", "+", "*" }, { "*", "-", "+" }, { "*", "+", "-" } };
- 
-        ArrayList<String> list = new ArrayList<String>();
-        int start = 0;
-        for (int i = 0; i < expression.length(); i++) {
-            if (expression.charAt(i) == '-' || expression.charAt(i) == '+' || expression.charAt(i) == '*') {
-                list.add(expression.substring(start, i)); // 연산자 앞 숫자 추가
-                list.add(expression.charAt(i) + ""); // 연산자 추가
-                start = i + 1;
+    
+    ArrayList<Character> operator = new ArrayList<>();
+    ArrayList<Long> operand = new ArrayList<>();
+    
+    public String operators = "+-*";
+    public long answer = 0;
+    
+    public long solution(String expression) {
+        int idx = 0;
+        for(int i = 0; i < expression.length(); i++){
+            if(operators.contains(expression.charAt(i)+"")){
+                operator.add(expression.charAt(i));
+                operand.add(Long.parseLong(expression.substring(idx, i)));
+                idx = i+1;
             }
         }
-        list.add(expression.substring(start)); // 마지막 숫자 추가
- 
-        for (int i = 0; i < op.length; i++) {
-            ArrayList<String> sub_list = new ArrayList<String>(list);
-            for (int k = 0; k < 3; k++) {
-                for (int j = 0; j < sub_list.size(); j++) {
-                    if (op[i][k].equals(sub_list.get(j))) {
-                        sub_list.set(j - 1, calc(sub_list.get(j - 1), sub_list.get(j), sub_list.get(j + 1)));
-                        sub_list.remove(j);
-                        sub_list.remove(j);
+        operand.add(Long.parseLong(expression.substring(idx)));
+        
+        permutation("");
+        return answer;
+    }
+    
+    public void permutation(String op){
+        if(op.length() == 3){
+            answer = Math.max(answer,calculate(op));
+            return;
+        }
+        
+        for(int i = 0; i < 3; i++){
+            if(op.contains(operators.charAt(i)+"")) continue;
+            permutation(op + operators.charAt(i));
+        }
+    }
+    
+    public long calculate(String op){
+        LinkedList<Character> operatorTemp = new LinkedList<>(operator);
+        LinkedList<Long> operandTemp = new LinkedList<>(operand);
+        
+        // System.out.println("op = " + op);
+        
+        for(int i = 0; i < 3; i++){
+            if(op.charAt(i) == '+'){
+                for(int j = 0; j < operatorTemp.size(); j++){
+                    if(operatorTemp.get(j) == '+'){
+                        
+                        operandTemp.set(j, operandTemp.get(j)+operandTemp.get(j+1));
+                        operatorTemp.remove(j);
+                        operandTemp.remove(j+1);
                         j--;
                     }
                 }
             }
-            answer = Math.max(answer, Math.abs(Long.parseLong(sub_list.get(0))));
+            else if(op.charAt(i) == '-'){
+                for(int j = 0; j < operatorTemp.size(); j++){
+                    if(operatorTemp.get(j) == '-'){
+                        
+                        operandTemp.set(j, operandTemp.get(j)-operandTemp.get(j+1));
+                        operatorTemp.remove(j);
+                        operandTemp.remove(j+1);
+                        j--;
+                    }
+                }
+            }
+            else if(op.charAt(i) == '*'){
+                for(int j = 0; j < operatorTemp.size(); j++){
+                    if(operatorTemp.get(j) == '*'){
+                        
+                        operandTemp.set(j, operandTemp.get(j)*operandTemp.get(j+1));
+                        operatorTemp.remove(j);
+                        operandTemp.remove(j+1);
+                        j--;
+                    }
+                }
+            }
+//             for(int j = 0; j < operatorTemp.size(); j++){
+//                 System.out.println(operatorTemp.get(j));
+//             }
+        
+//             for(int j = 0; j < operandTemp.size(); j++){
+//                 System.out.println(operandTemp.get(j));
+//             }
         }
- 
-        return answer;
-    }
- 
-    private static String calc(String num1, String op, String num2) {
-        long n1 = Long.parseLong(num1);
-        long n2 = Long.parseLong(num2);
- 
-        if (op.equals("+"))
-            return n1 + n2 + "";
-        else if (op.equals("-"))
-            return n1 - n2 + "";
- 
-        return n1 * n2 + "";
+        
+        return Math.abs(operandTemp.get(0));
     }
 }
