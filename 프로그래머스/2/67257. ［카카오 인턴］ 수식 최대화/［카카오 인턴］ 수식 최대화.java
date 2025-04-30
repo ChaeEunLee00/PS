@@ -23,67 +23,42 @@ class Solution {
         return answer;
     }
     
-    public void permutation(String op){
-        if(op.length() == 3){
-            answer = Math.max(answer,calculate(op));
+    public void permutation(String ops){
+        if(ops.length() == 3){
+            answer = Math.max(answer,calculate(ops));
             return;
         }
         
         for(int i = 0; i < 3; i++){
-            if(op.contains(operators.charAt(i)+"")) continue;
-            permutation(op + operators.charAt(i));
+            if(ops.contains(operators.charAt(i)+"")) continue;
+            permutation(ops + operators.charAt(i));
         }
     }
     
-    public long calculate(String op){
+    public long calculate(String ops){
         LinkedList<Character> operatorTemp = new LinkedList<>(operator);
         LinkedList<Long> operandTemp = new LinkedList<>(operand);
         
-        // System.out.println("op = " + op);
-        
         for(int i = 0; i < 3; i++){
-            if(op.charAt(i) == '+'){
-                for(int j = 0; j < operatorTemp.size(); j++){
-                    if(operatorTemp.get(j) == '+'){
-                        
-                        operandTemp.set(j, operandTemp.get(j)+operandTemp.get(j+1));
-                        operatorTemp.remove(j);
-                        operandTemp.remove(j+1);
-                        j--;
-                    }
+            char op = ops.charAt(i);
+            for(int j = 0; j < operatorTemp.size(); j++){
+                if(op == operatorTemp.get(j)){
+                    operandTemp.set(j, cal(operandTemp.get(j),operandTemp.get(j+1), op));
+                    operatorTemp.remove(j);
+                    operandTemp.remove(j+1);
+                    j--;
                 }
             }
-            else if(op.charAt(i) == '-'){
-                for(int j = 0; j < operatorTemp.size(); j++){
-                    if(operatorTemp.get(j) == '-'){
-                        
-                        operandTemp.set(j, operandTemp.get(j)-operandTemp.get(j+1));
-                        operatorTemp.remove(j);
-                        operandTemp.remove(j+1);
-                        j--;
-                    }
-                }
-            }
-            else if(op.charAt(i) == '*'){
-                for(int j = 0; j < operatorTemp.size(); j++){
-                    if(operatorTemp.get(j) == '*'){
-                        
-                        operandTemp.set(j, operandTemp.get(j)*operandTemp.get(j+1));
-                        operatorTemp.remove(j);
-                        operandTemp.remove(j+1);
-                        j--;
-                    }
-                }
-            }
-//             for(int j = 0; j < operatorTemp.size(); j++){
-//                 System.out.println(operatorTemp.get(j));
-//             }
-        
-//             for(int j = 0; j < operandTemp.size(); j++){
-//                 System.out.println(operandTemp.get(j));
-//             }
         }
         
         return Math.abs(operandTemp.get(0));
     }
+    
+    public long cal(long a, long b, char op){
+        if(op == '+') return a+b;
+        else if(op == '-') return a-b;
+        else return a*b;
+    }
+                                    
+                                    
 }
