@@ -2,17 +2,42 @@ class Solution {
     public long solution(int cap, int n, int[] deliveries, int[] pickups) {
         long answer = 0;
         
-        int d = 0;
-        int p = 0;
-        for(int i = n; i >=1 ; i--){
-            d += deliveries[i-1]; // 배달할 개수
-            p += pickups[i-1];    // 수거할 개수
-            
-            while(d > 0 || p > 0){  // 배달 or 수거가 있으면
-                answer += i*2;
-                d -= cap;
-                p -= cap;
+        int pos = n;
+        int cnt;
+        while(pos != 0){
+            if(deliveries[pos-1] == 0 && pickups[pos-1] == 0){
+                pos--;
+                continue;
             }
+            
+            cnt = 0;
+            int delivery = pos-1;
+            while(cnt < cap){
+                if(delivery < 0) break;
+                if(deliveries[delivery] == 0){
+                    delivery--;
+                    continue;
+                }
+                deliveries[delivery]--;
+                
+                cnt++;
+            }
+            
+            cnt = 0;
+            int pickup = pos-1;
+            while(cnt < cap){
+                if(pickup < 0) break;
+                if(pickups[pickup] == 0){
+                    pickup--;
+                    continue;
+                }
+                pickups[pickup]--;
+                
+                cnt++;
+            }
+            
+            
+            answer += pos*2;
         }
         
         return answer;
