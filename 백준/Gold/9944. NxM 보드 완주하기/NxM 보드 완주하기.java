@@ -100,13 +100,4 @@ public class Main {
         if(y >= 0 && y < N && x >= 0 && x < M && map[y][x] == '.') return true;
         else return false;
     }
-
-    public static boolean allVisited(){
-        for(int i = 0; i < N; i++){
-            for(int j = 0; j < M; j++){
-                if(map[i][j] == '.' && !visited[i][j]) return false;
-            }
-        }
-        return true;
-    }
 }
