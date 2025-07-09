@@ -43,8 +43,7 @@ public class Main {
             parent[i] = i;
         }
 
-        // MST - 크루스칼 알고리즘
-        // 이미 연결되어 있는 부분 union
+        // 이미 연결되어 있는 부분 union find
         for(int i = 1; i <= M; i++){
             st = new StringTokenizer(br.readLine());
             int g1 = Integer.parseInt(st.nextToken());
@@ -60,7 +59,8 @@ public class Main {
             }
         }
 
-        // dist 짧은 순으로 union 진행
+        // MST - 크루스칼 알고리즘
+        // dist 짧은 순으로 union find
         double minDist = 0;
         while(!pq.isEmpty()){
             Edge curEdge = pq.poll();
