@@ -8,7 +8,7 @@ class Solution {
                 w = total / h;
                 
                 int calBrown = (w-1)*2 + (h-1)*2;
-                int calYellow = (w-2)*(h-2);
+                int calYellow = (w-2) * (h-2);
                 if(calBrown == brown && calYellow == yellow) break;
             }
         }
