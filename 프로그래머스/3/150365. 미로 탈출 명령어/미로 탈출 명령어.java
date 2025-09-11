@@ -3,8 +3,6 @@ class Solution {
     public int m;
     public int r;
     public int c;
-    public int y;
-    public int x;
     public int k;
     public String answer;
     
@@ -17,8 +15,6 @@ class Solution {
         this.m = m;
         this.r = r;
         this.c = c;
-        this.y = y;
-        this.x = x;
         this.k = k;
         this.answer = "";
         
