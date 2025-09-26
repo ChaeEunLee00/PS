@@ -4,7 +4,7 @@ class Solution {
     public int r;
     public int c;
     public int k;
-    public String answer;
+    public String answer = "";
     
     public int[] dx = {1, 0, 0, -1};
     public int[] dy = {0, -1, 1, 0};
@@ -16,12 +16,12 @@ class Solution {
         this.r = r;
         this.c = c;
         this.k = k;
-        this.answer = "";
         
+        // 불가능한 경우
         int dist = Math.abs(x-r) + Math.abs(y-c);
-        if(k < dist) return "impossible";
-        if(dist % 2 == 0 && k % 2 != 0) return "impossible";
-        if(dist % 2 != 0 && k % 2 == 0) return "impossible";
+        if(k < dist || (k - dist) % 2 != 0) return "impossible";
+        // if(dist % 2 == 0 && k % 2 != 0) return "impossible";
+        // if(dist % 2 != 0 && k % 2 == 0) return "impossible";
         
         dfs(x, y, "");
 
