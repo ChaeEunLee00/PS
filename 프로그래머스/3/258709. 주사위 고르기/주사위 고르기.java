@@ -2,20 +2,21 @@ import java.util.*;
 
 class Solution {
     
-    public int[][] dice;
-        
     public int n;
-    public int[] answer;
+    public int[][] dice;
     public boolean[] diceAB;
     
     public int max = 0;
+    public int[] answer;
     
     public int[] solution(int[][] dice) {
-        this.dice = dice;
         this.n = dice.length;
-        this.answer = new int[n/2];
+        this.dice = dice;
         this.diceAB = new boolean[n];
         
+        this.answer = new int[n/2];
+        
+        // 주사위를 가져가는 모든 경우의 수
         comb(0, 0);
         
         return answer;
@@ -46,7 +47,7 @@ class Solution {
     }
     
     public int countAWin(){
-        int cnt = 0;
+        int num = 0;
         
         // A 주사위 모든 합의 경우의 수
         ArrayList<Integer> sumAList = new ArrayList<>();
@@ -69,10 +70,10 @@ class Solution {
                 else left = mid+1;
             }
             
-            cnt += left;
+            num += left;
         }
         
-        return cnt;
+        return num;
     }
     
     public void sumA(int sum, int diceCnt, int curIdx, ArrayList<Integer> sumAList){
