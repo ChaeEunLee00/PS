@@ -1,13 +1,16 @@
+import java.io.*;
 import java.util.*;
 
 public class Main{
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
-        int N = sc.nextInt();
+        int N = Integer.parseInt(br.readLine());
         int[] cost = new int[N];
+        
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i = 0; i < N; i++){
-            cost[i] = sc.nextInt();
+            cost[i] = Integer.parseInt(st.nextToken());
         }
         
         int[] dp = new int[N+1];
@@ -19,6 +22,5 @@ public class Main{
         }
                
         System.out.println(dp[N]);
-        sc.close();
     }
 }
