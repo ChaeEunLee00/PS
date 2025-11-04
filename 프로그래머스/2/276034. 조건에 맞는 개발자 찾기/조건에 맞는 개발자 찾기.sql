@@ -1,10 +1,8 @@
 -- 코드를 작성해주세요
 SELECT d.ID, d.EMAIL, d.FIRST_NAME, d.LAST_NAME
 FROM DEVELOPERS d
-WHERE 
-    d.SKILL_CODE 
-    & (SELECT SUM(s.CODE)
-       FROM SKILLCODES s
-       WHERE s.NAME = 'Python' or s.NAME = 'C#') 
-    != 0
+JOIN SKILLCODES s 
+    ON d.SKILL_CODE & s.CODE = s.CODE
+WHERE s.NAME IN ('Python', 'C#')
+GROUP BY d.ID, d.EMAIL, d.FIRST_NAME, d.LAST_NAME
 ORDER BY d.ID;
